@@ -1,0 +1,14 @@
+logs
+target
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID
+.sbtserver/
+app-2.11/
+node_modules/
+project/
+test-2.11/
+test/resources/
