@@ -1,16 +1,18 @@
 package controllers
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.{Inject, Named, Singleton}
 
-import actor.MyWebSocketActor
-import akka.actor.ActorSystem
+import com.atanana.actor.SocketHandler
+import akka.actor.{ActorRef, ActorSystem}
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import play.api.mvc.{Controller, WebSocket}
 
 @Singleton
-class DuelController @Inject()(implicit actorSystem: ActorSystem, materializer: Materializer) extends Controller {
-  def socket = WebSocket.accept[String, String] { request =>
-    ActorFlow.actorRef(out => MyWebSocketActor.props(out))
+class DuelController @Inject()(implicit actorSystem: ActorSystem,
+                               materializer: Materializer,
+                               @Named("DuelsProcessor") processor: ActorRef) extends Controller {
+  def socket: WebSocket = WebSocket.accept[String, String] { request =>
+    ActorFlow.actorRef(out => SocketHandler.props(out, processor))
   }
 }
