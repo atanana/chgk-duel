@@ -12,5 +12,7 @@ class SocketHandler(out: ActorRef, processor: ActorRef) extends Actor {
   def receive: Receive = {
     case msg: String =>
       processor ! DuelRequest(out, UUID.randomUUID())
+    case queueState: DuelsQueueState =>
+      out ! queueState.requests.toString()
   }
 }
