@@ -11,7 +11,7 @@ import play.api.mvc.{Controller, WebSocket}
 @Singleton
 class DuelController @Inject()(implicit actorSystem: ActorSystem,
                                materializer: Materializer,
-                               @Named("DuelsProcessor") processor: ActorRef) extends Controller {
+                               @Named("DuelsQueue") processor: ActorRef) extends Controller {
   def socket: WebSocket = WebSocket.accept[String, String] { request =>
     ActorFlow.actorRef(out => SocketHandler.props(out, processor))
   }

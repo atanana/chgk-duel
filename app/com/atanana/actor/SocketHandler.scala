@@ -1,5 +1,7 @@
 package com.atanana.actor
 
+import java.util.UUID
+
 import akka.actor._
 
 object SocketHandler {
@@ -9,6 +11,6 @@ object SocketHandler {
 class SocketHandler(out: ActorRef, processor: ActorRef) extends Actor {
   def receive: Receive = {
     case msg: String =>
-      processor ! DuelRequest(out)
+      processor ! DuelRequest(out, UUID.randomUUID())
   }
 }
