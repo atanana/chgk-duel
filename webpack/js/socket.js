@@ -6,6 +6,7 @@ socket.onopen = () => {
 };
 
 socket.onclose = (event) => {
+    console.log(event);
     if (event.wasClean) {
         console.log('Connection closed ok');
     } else {
@@ -26,7 +27,7 @@ socket.onerror = (error) => {
 
 module.exports = {
     send: function (data) {
-        socket.send(data);
+        socket.send(JSON.stringify(data));
     },
     addMessageListener: function (listener) {
         messageListeners.push(listener)

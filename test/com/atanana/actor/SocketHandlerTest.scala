@@ -18,9 +18,9 @@ class SocketHandlerTest extends ActorSpec {
     }
 
     "transmit queue state" in {
-      val queueState = List("test 1", "test 2", "test 3")
-      actor ! DuelsQueueState(queueState)
-      outProbe.expectMsg(queueState.toString())
+      val message = DuelsQueueState(List("test 1", "test 2", "test 3"))
+      actor ! message
+      outProbe.expectMsg(message)
     }
   }
 }

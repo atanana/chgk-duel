@@ -24,9 +24,9 @@ class DuelsQueueTest extends ActorSpec with BeforeAndAfter {
 
     "notifies listener when request processed" in {
       actor ! DuelRequest(listenerProbe.ref, uuid)
-      val message = "test message"
-      actor ! DuelResult(message, uuid)
-      listenerProbe.expectMsg(message)
+      val result = DuelResult("test message", uuid)
+      actor ! result
+      listenerProbe.expectMsg(result)
     }
   }
 }

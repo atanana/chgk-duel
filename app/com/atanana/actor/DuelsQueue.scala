@@ -17,7 +17,7 @@ class DuelsQueue @Inject()(@Named("DuelsProcessorRouter") private val router: Ac
     case duelResult: DuelResult =>
       queue.find(_.uuid == duelResult.uuid)
         .foreach(duelRequest => {
-          duelRequest.listener ! duelResult.message
+          duelRequest.listener ! duelResult
           queue = queue diff List(duelRequest)
           queueUpdated()
         })
@@ -28,5 +28,3 @@ class DuelsQueue @Inject()(@Named("DuelsProcessorRouter") private val router: Ac
     context.system.actorSelection("/user/*") ! DuelsQueueState(requests)
   }
 }
-
-case class DuelsQueueState(requests: List[String])

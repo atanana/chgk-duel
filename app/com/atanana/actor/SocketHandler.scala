@@ -13,6 +13,8 @@ class SocketHandler(out: ActorRef, processor: ActorRef) extends Actor {
     case _: String =>
       processor ! DuelRequest(out, UUID.randomUUID())
     case queueState: DuelsQueueState =>
-      out ! queueState.requests.toString()
+      out ! queueState
   }
+
+  //todo cancel duel on close websocket
 }

@@ -1,8 +1,6 @@
 package com.atanana.actor
 
-import java.util.UUID
-
-import akka.actor.{Actor, ActorRef}
+import akka.actor.Actor
 
 class DuelsProcessor extends Actor {
   private var duelCounter: Int = 0
@@ -14,7 +12,3 @@ class DuelsProcessor extends Actor {
       duelRequest.listener ! DuelResult(s"Duel $duelCounter processed", duelRequest.uuid)
   }
 }
-
-case class DuelRequest(listener: ActorRef, uuid: UUID)
-
-case class DuelResult(message: String, uuid: UUID)
