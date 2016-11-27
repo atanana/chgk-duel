@@ -1,12 +1,12 @@
 package com.atanana.actor
 
-import akka.actor.{Actor, ActorRef, Props}
-import akka.routing.RoundRobinPool
+import javax.inject.{Inject, Named}
+
+import akka.actor.{Actor, ActorRef}
 
 import scala.collection.immutable
 
-class DuelsQueue extends Actor {
-  val router: ActorRef = context.actorOf(RoundRobinPool(1).props(Props(classOf[DuelsProcessor])), "DuelsProcessorRouter")
+class DuelsQueue @Inject()(@Named("DuelsProcessorRouter") private val router: ActorRef) extends Actor {
   var queue: List[DuelRequest] = immutable.List.empty
 
   override def receive: Receive = {
