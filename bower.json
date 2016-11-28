@@ -1,0 +1,22 @@
+{
+  "name": "chgk-duel-frontend",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "atanana <tanana@email.ru>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1"
+  }
+}

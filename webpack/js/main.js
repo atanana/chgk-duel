@@ -1,5 +1,7 @@
+const $ = require('../../bower_components/jquery/dist/jquery.js');
+
 const socket = require('./socket.js');
-const log = document.getElementById('log');
+const $log = $('#log');
 
 document.getElementById('duel').onclick = () => {
     socket.send({
@@ -9,5 +11,5 @@ document.getElementById('duel').onclick = () => {
 };
 
 socket.addMessageListener(function (data) {
-    log.value += data + '\n';
+    $log.val($log.val() + data + '\n');
 });
