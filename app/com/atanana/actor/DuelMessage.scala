@@ -26,3 +26,11 @@ case class DuelsQueueState(requests: List[String]) extends DuelMessage("DuelsQue
     "requests" -> requests
   )
 }
+
+case class DuelRequestAccepted(uuid: UUID) extends DuelMessage("DuelRequestAccepted") {
+  override def toJson: JsObject = super.toJson ++ Json.obj(
+    "uuid" -> uuid
+  )
+}
+
+case class ClientDuelRequest(teamId1: Long, teamId2: Long)

@@ -10,8 +10,10 @@ object SocketHandler {
 
 class SocketHandler(out: ActorRef, processor: ActorRef) extends Actor {
   def receive: Receive = {
-    case _: String =>
-      processor ! DuelRequest(out, UUID.randomUUID())
+    case _: ClientDuelRequest =>
+      val uuid = UUID.randomUUID()
+      out ! DuelRequestAccepted(uuid)
+      processor ! DuelRequest(out, uuid)
     case queueState: DuelsQueueState =>
       out ! queueState
   }

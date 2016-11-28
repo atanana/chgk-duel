@@ -3,7 +3,8 @@ const log = document.getElementById('log');
 
 document.getElementById('duel').onclick = () => {
     socket.send({
-        value: "test"
+        teamId1: 1,
+        teamId2: 2
     });
 };
 
