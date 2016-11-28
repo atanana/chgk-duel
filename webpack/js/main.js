@@ -1,7 +1,7 @@
-const $ = require('../../bower_components/jquery/dist/jquery.js');
+const $ = require('jquery');
 
 const socket = require('./socket.js');
-const $log = $('#log');
+const queueView = require('./queueView.js')($('#queue-container'));
 
 document.getElementById('duel').onclick = () => {
     socket.send({
@@ -11,5 +11,7 @@ document.getElementById('duel').onclick = () => {
 };
 
 socket.addMessageListener(function (data) {
-    $log.val($log.val() + data + '\n');
+    if (data.type === 'DuelsQueueState') {
+        queueView.queueChanged(data.requests)
+    }
 });

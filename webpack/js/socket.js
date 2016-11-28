@@ -17,7 +17,7 @@ socket.onclose = (event) => {
 socket.onmessage = (event) => {
     console.log('Data received: ' + event.data);
     for (let listener of messageListeners) {
-        listener(event.data)
+        listener(JSON.parse(event.data))
     }
 };
 
