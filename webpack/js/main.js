@@ -1,3 +1,5 @@
+require('../scss/main.scss');
+
 const $ = require('jquery');
 
 const socket = require('./socket.js');
