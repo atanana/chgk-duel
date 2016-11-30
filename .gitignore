@@ -12,4 +12,4 @@ node_modules/
 project/
 test-2.11/
 test/resources/
-public/duel.js
+public/dist/

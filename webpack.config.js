@@ -3,7 +3,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
     entry: "./webpack/js/main.js",
     output: {
-        path: 'public',
+        path: 'public/dist',
         filename: "duel.js"
     },
     module: {
@@ -22,9 +22,13 @@ module.exports = {
                 loader: ExtractTextPlugin.extract('css-loader!sass-loader?sourceMap')
             },
             {
-                test: /\.svg/,
-                loader: 'svg-url-loader'
-            }
+                test: /\.(woff2?|svg)$/,
+                loader: 'url-loader?limit=10000'
+            },
+            {
+                test: /\.(ttf|eot)$/,
+                loader: 'file-loader'
+            },
         ]
     },
     resolve: {

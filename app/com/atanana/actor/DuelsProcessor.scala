@@ -7,7 +7,7 @@ class DuelsProcessor extends Actor {
 
   override def receive: Receive = {
     case duelRequest: DuelRequest =>
-      Thread.sleep(2000)
+      Thread.sleep(20000)
       duelCounter += 1
       duelRequest.listener ! DuelResult(s"Duel $duelCounter processed", duelRequest.uuid)
   }

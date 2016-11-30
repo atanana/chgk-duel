@@ -1,6 +1,6 @@
-require('../scss/main.scss');
-
 const $ = require('jquery');
+
+require('bootstrap-loader');
 
 const socket = require('./socket.js');
 const queueView = require('./queueView.js')($('#queue-container'));
@@ -14,6 +14,8 @@ document.getElementById('duel').onclick = () => {
 
 socket.addMessageListener(function (data) {
     if (data.type === 'DuelsQueueState') {
-        queueView.queueChanged(data.requests)
+        queueView.queueChanged(data.requests);
+    } else if (data.type === 'DuelRequestAccepted') {
+        queueView.addOwnJob(data.uuid);
     }
 });

@@ -1,10 +1,25 @@
+body {
+  padding: 20px;
+}
+
 #queue-container {
   div {
-    width: 50px;
-    height: 50px;
-    background-image: url("../img/job-icon.svg");
-    background-size: cover;
     display: inline-block;
-    margin: 5px;
+    margin-right: 1em;
+    padding: 1em;
+    border-radius: 0.2em;
+    //noinspection SassScssResolvedByNameOnly
+    background-color: $label-default-bg;
+
+    //noinspection SassScssResolvedByNameOnly
+    &.own-job {
+      background-color: $label-success-bg;
+    }
+
+    //noinspection SassScssResolvedByNameOnly
+    .glyphicon {
+      color: $label-color;
+      font-size: 4em;
+    }
   }
 }
