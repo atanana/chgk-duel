@@ -5,7 +5,7 @@ let _ownJobs = [];
 
 module.exports = function ($container) {
     function refreshView() {
-        _queue.forEach(item => $container.append($.parseHTML(
+        _queue.forEach(item => $container.append($(
             `
             <div class="${_ownJobs.indexOf(item) !== -1 ? 'own-job' : ''}">
                 <span class="glyphicon glyphicon-stats"></span>
@@ -21,7 +21,8 @@ module.exports = function ($container) {
             refreshView();
         },
         addOwnJob: function (id) {
-            _ownJobs.push(id)
+            _ownJobs.push(id);
+            refreshView();
         }
     }
 };
