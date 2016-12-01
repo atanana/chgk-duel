@@ -3,7 +3,8 @@ const $ = require('jquery');
 require('bootstrap-loader');
 
 const socket = require('./socket.js');
-const queueView = require('./queueView.js')($('#queue-container'));
+const queueView = require('./queue/queueView.js')($('#queue-container'));
+const queuePresenter = require('./queue/queuePresenter.js')(socket, queueView);
 
 document.getElementById('duel').onclick = () => {
     socket.send({
@@ -11,11 +12,3 @@ document.getElementById('duel').onclick = () => {
         teamId2: 2
     });
 };
-
-socket.addMessageListener(function (data) {
-    if (data.type === 'DuelsQueueState') {
-        queueView.queueChanged(data.requests);
-    } else if (data.type === 'DuelRequestAccepted') {
-        queueView.addOwnJob(data.uuid);
-    }
-});
