@@ -1,4 +1,4 @@
-const jsdom = require('mocha-jsdom')
+const jsdom = require('mocha-jsdom');
 const sinon = require('sinon');
 const chai = require('chai');
 chai.should();
@@ -38,9 +38,18 @@ describe('queueView.js', function () {
     });
 
     describe('#addOwnJob(id)', function () {
+        it('should select own job when empty', function () {
+            queueView.addOwnJob('1');
+            queueView.queueChanged(['1', '2', '3']);
+
+            container.append.args[0][0].hasClass('own-job').should.be.equals(true)
+        });
+
         it('should select own job when not empty', function () {
             queueView.queueChanged(['1', '2', '3']);
-            queueView.addOwnJob([2]);
+            queueView.addOwnJob('2');
+
+            container.append.args[4][0].hasClass('own-job').should.be.equals(true)
         });
     });
 });
