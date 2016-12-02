@@ -34,3 +34,5 @@ case class DuelRequestAccepted(uuid: UUID) extends DuelMessage("DuelRequestAccep
 }
 
 case class ClientDuelRequest(teamId1: Long, teamId2: Long)
+
+case class DuelsQueueStateRequest()

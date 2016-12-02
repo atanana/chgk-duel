@@ -21,10 +21,16 @@ class DuelsQueue @Inject()(@Named("DuelsProcessorRouter") private val router: Ac
           queue = queue diff List(duelRequest)
           queueUpdated()
         })
+    case _: DuelsQueueStateRequest =>
+      sender() ! queueState
   }
 
   private def queueUpdated() = {
+    context.system.actorSelection("/user/*") ! queueState
+  }
+
+  private def queueState = {
     val requests = queue.map(_.uuid.toString)
-    context.system.actorSelection("/user/*") ! DuelsQueueState(requests)
+    DuelsQueueState(requests)
   }
 }
