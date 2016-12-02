@@ -9,7 +9,8 @@ target
 .sbtserver/
 app-2.11/
 node_modules/
-project/
 test-2.11/
 test/resources/
 public/dist/
+project/project/
+project/target/
