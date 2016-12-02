@@ -24,19 +24,19 @@ class DuelsQueueTest extends ActorSpec with BeforeAndAfter {
 
   "Actor" must {
     "refers to processor duel request" in {
-      actor ! DuelRequest(listenerProbe.ref, uuid)
-      routerProbe.expectMsg(DuelRequest(actor, uuid))
+      actor ! DuelRequest(listenerProbe.ref, uuid, 1, 2)
+      routerProbe.expectMsg(DuelRequest(actor, uuid, 1, 2))
     }
 
     "notifies listener when request processed" in {
-      actor ! DuelRequest(listenerProbe.ref, uuid)
+      actor ! DuelRequest(listenerProbe.ref, uuid, 1, 2)
       val result = DuelResult("test message", uuid)
       actor ! result
       listenerProbe.expectMsg(result)
     }
 
     "provides queue state" in {
-      actor ! DuelRequest(listenerProbe.ref, uuid)
+      actor ! DuelRequest(listenerProbe.ref, uuid, 1, 2)
       implicit val timeout = Timeout(5 seconds)
       val future = (actor ? DuelsQueueStateRequest()).mapTo[DuelsQueueState]
       val queueState = Await.result(future, 5 seconds)

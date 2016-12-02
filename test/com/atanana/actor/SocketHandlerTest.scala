@@ -24,7 +24,7 @@ class SocketHandlerTest extends ActorSpec with BeforeAndAfter {
       }
 
       processorProbe.expectMsgPF() {
-        case DuelRequest(actorRef, _) =>
+        case DuelRequest(actorRef, _, _, _) =>
           actorRef shouldEqual outProbe.ref
         case DuelsQueueStateRequest() =>
       }

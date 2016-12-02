@@ -13,7 +13,7 @@ sealed abstract class DuelMessage(val strType: String) {
   }
 }
 
-case class DuelRequest(listener: ActorRef, uuid: UUID) extends DuelMessage("DuelRequest")
+case class DuelRequest(listener: ActorRef, uuid: UUID, teamId1: Long, teamId2: Long) extends DuelMessage("DuelRequest")
 
 case class DuelResult(message: String, uuid: UUID) extends DuelMessage("DuelResult") {
   override def toJson: JsObject = super.toJson ++ Json.obj(

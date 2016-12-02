@@ -19,10 +19,10 @@ class SocketHandler(out: ActorRef, queue: ActorRef) extends Actor {
   implicit val timeout = Timeout(5 seconds)
 
   def receive: Receive = {
-    case _: ClientDuelRequest =>
+    case duelRequest: ClientDuelRequest =>
       val uuid = UUID.randomUUID()
       out ! DuelRequestAccepted(uuid)
-      queue ! DuelRequest(out, uuid)
+      queue ! DuelRequest(out, uuid, duelRequest.teamId1, duelRequest.teamId2)
     case queueState: DuelsQueueState =>
       out ! queueState
   }

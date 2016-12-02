@@ -7,6 +7,7 @@ import akka.routing.RoundRobinPool
 import com.atanana.actor.{DuelsProcessor, DuelsQueue}
 import com.google.inject.{AbstractModule, Provides}
 import play.api.libs.concurrent.AkkaGuiceSupport
+import play.api.libs.ws.WSClient
 
 
 class DuelModule extends AbstractModule with AkkaGuiceSupport {
@@ -17,7 +18,7 @@ class DuelModule extends AbstractModule with AkkaGuiceSupport {
   @Provides
   @Singleton
   @Named("DuelsProcessorRouter")
-  def duelsProcessorRouter(actorSystem: ActorSystem): ActorRef = {
-    actorSystem.actorOf(RoundRobinPool(1).props(Props(classOf[DuelsProcessor])), "DuelsProcessorRouter")
+  def duelsProcessorRouter(actorSystem: ActorSystem, ws: WSClient): ActorRef = {
+    actorSystem.actorOf(RoundRobinPool(1).props(Props(new DuelsProcessor(ws))), "DuelsProcessorRouter")
   }
 }
