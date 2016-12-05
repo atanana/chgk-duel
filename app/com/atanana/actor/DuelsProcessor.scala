@@ -6,8 +6,8 @@ import akka.actor.Actor
 import com.atanana.parsers.TeamParser
 import play.api.libs.ws.WSClient
 
-import scala.util.{Failure, Success}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
 
 class DuelsProcessor @Inject()(ws: WSClient, teamParser: TeamParser) extends Actor {
   val TEAM_ADDRESS = "http://rating.chgk.info/team/"
@@ -25,6 +25,20 @@ class DuelsProcessor @Inject()(ws: WSClient, teamParser: TeamParser) extends Act
   }
 
   private def teamPage(teamId: Long) = {
-    ws.url(TEAM_ADDRESS + teamId).get().map(_.body)
+    request(TEAM_ADDRESS + teamId)
+  }
+
+  private def tournamentInfo(tournamentId: Long, teamId1: Long, teamId2: Long) = {
+    val infoLink = tournamentInfoLink(tournamentId)
+    request(infoLink(teamId1))
+      .zip(request(infoLink(teamId1)))
+  }
+
+  private def tournamentInfoLink(tournamentId: Long)(teamId: Long) = {
+    s"http://rating.chgk.info/api/tournaments/$tournamentId/results/$teamId.json"
+  }
+
+  private def request(url: String) = {
+    ws.url(url).get().map(_.body)
   }
 }
