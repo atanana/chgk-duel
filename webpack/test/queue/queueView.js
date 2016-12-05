@@ -24,21 +24,36 @@ describe('queueView.js', function () {
         });
 
         it('should add correct views to container', function () {
-            queueView.update(new Map([
-                ['1', ''],
-                ['2', 'class'],
-                ['3', '']
-            ]));
-            container.append.callCount.should.be.equal(3);
-            function checkItem($item, classStr) {
-                $item.is('div').should.be.equal(true);
-                $item.find('span').length.should.be.equal(1);
-                $item.attr('class').should.be.equal(classStr);
+            function createViewProps(itemClass, label) {
+                return {
+                    itemClass: itemClass,
+                    label: label
+                }
             }
 
-            checkItem(container.append.args[0][0], '');
-            checkItem(container.append.args[1][0], 'class');
-            checkItem(container.append.args[2][0], '');
+            queueView.update(new Map([
+                ['1', createViewProps('', '')],
+                ['2', createViewProps('test class', 'test label')],
+                ['3', createViewProps('', '')]
+            ]));
+            container.append.callCount.should.be.equal(3);
+            function checkItem($item, classStr, label) {
+                $item.is('div').should.be.equal(true);
+                $item.attr('class').should.be.equal(classStr);
+                const $spans = $item.find('span');
+                const spansCount = label ? 2 : 1;
+                $spans.length.should.be.equal(spansCount);
+
+                if (label) {
+                    const $label = $spans.last();
+                    $label.attr('class').should.be.equal('job-label');
+                    $label.text().should.be.equal(label);
+                }
+            }
+
+            checkItem(container.append.args[0][0], '', '');
+            checkItem(container.append.args[1][0], 'test class', 'test label');
+            checkItem(container.append.args[2][0], '', '');
         });
     });
 });

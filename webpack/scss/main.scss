@@ -3,23 +3,35 @@ body {
 }
 
 #queue-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
   div {
+    $default-margin: 1em;
+
     display: inline-block;
-    margin-right: 1em;
-    padding: 1em;
+    margin-right: $default-margin;
+    margin-bottom: $default-margin;
+    padding: $default-margin;
     border-radius: 0.2em;
-    //noinspection SassScssResolvedByNameOnly
     background-color: $label-default-bg;
 
-    //noinspection SassScssResolvedByNameOnly
     &.own-job {
       background-color: $label-success-bg;
     }
 
-    //noinspection SassScssResolvedByNameOnly
     .glyphicon {
       color: $label-color;
-      font-size: 4em;
+      font-size: 2em;
+    }
+
+    .job-label {
+      text-transform: uppercase;
+      font-weight: bold;
+      color: $label-color;
+      margin-left: $default-margin;
+      display: inline-block;
     }
   }
 }

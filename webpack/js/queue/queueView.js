@@ -5,14 +5,20 @@ module.exports = function ($container) {
         update: function (views) {
             $container.empty();
             //noinspection JSUnusedLocalSymbols
-            for (let [_, itemClass] of views) {
-                $container.append($(
+            for (let [_, data] of views) {
+                let $item = $(
                     `
-                    <div class="${itemClass}">
+                    <div class="${data.itemClass}">
                         <span class="glyphicon glyphicon-stats"></span>
                     </div>
                     `
-                ))
+                );
+
+                if (data.label) {
+                    $item.append($(`<span class="job-label">${data.label}</span>`));
+                }
+
+                $container.append($item)
             }
         }
     }

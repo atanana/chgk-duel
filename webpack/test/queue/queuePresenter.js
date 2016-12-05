@@ -37,7 +37,7 @@ describe('queuePresenter.js', function () {
             views.has('3').should.be.equal(true);
         });
 
-        it('should set correct classes to views', function () {
+        it('should set correct properties to views', function () {
             const listener = socket.addMessageListener.args[0][0];
             listener({
                 type: 'DuelsQueueState',
@@ -50,14 +50,20 @@ describe('queuePresenter.js', function () {
 
             queueView.update.calledTwice.should.be.equal(true);
             let views = queueView.update.args[0][0];
-            views.get('1').should.be.equal('');
-            views.get('2').should.be.equal('');
-            views.get('3').should.be.equal('');
+            views.get('1').itemClass.should.be.equal('');
+            views.get('1').label.should.be.equal('');
+            views.get('2').itemClass.should.be.equal('');
+            views.get('2').label.should.be.equal('');
+            views.get('3').itemClass.should.be.equal('');
+            views.get('3').label.should.be.equal('');
 
             views = queueView.update.args[1][0];
-            views.get('1').should.be.equal('');
-            views.get('2').should.be.equal('own-job');
-            views.get('3').should.be.equal('');
+            views.get('1').itemClass.should.be.equal('');
+            views.get('1').label.should.be.equal('');
+            views.get('2').itemClass.should.be.equal('own-job');
+            views.get('2').label.should.be.equal('Ваш запрос');
+            views.get('3').itemClass.should.be.equal('');
+            views.get('3').label.should.be.equal('');
         });
     });
 });

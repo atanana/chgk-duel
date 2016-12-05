@@ -5,8 +5,13 @@ module.exports = function (socket, queueView) {
     function updateView() {
         const views = new Map();
         _queue.forEach(item => {
-            let itemClass = _ownJobs.indexOf(item) !== -1 ? 'own-job' : '';
-            views.set(item, itemClass);
+            const isOwnJob = _ownJobs.indexOf(item) !== -1;
+            const itemClass = isOwnJob ? 'own-job' : '';
+            const label = isOwnJob ? 'Ваш запрос' : '';
+            views.set(item, {
+                itemClass: itemClass,
+                label: label
+            });
         });
         queueView.update(views)
     }
