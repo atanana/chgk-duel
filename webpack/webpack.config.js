@@ -1,15 +1,15 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-    entry: "./webpack/js/main.js",
+    entry: "./js/main.js",
     output: {
-        path: 'public/dist',
+        path: '../public/dist',
         filename: "duel.js"
     },
     module: {
         loaders: [
             {
-                test: /^webpack\/\.js$/,
+                test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,
                 loader: 'babel-loader',
                 query: {
@@ -18,7 +18,6 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                // test: /^webpack\/\.scss$/,
                 loader: ExtractTextPlugin.extract('css-loader!sass-loader?sourceMap')
             },
             {
