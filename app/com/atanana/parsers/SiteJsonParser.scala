@@ -18,6 +18,12 @@ class SiteJsonParser {
     val teamJson = Json.parse(teamInfo).as[JsArray].head.as[JsObject]
     teamInfoReads.reads(teamJson).get
   }
+
+  def parseTeamResult(teamResult: String): Int = {
+    (Json.parse(teamResult) \\ "mask")
+      .flatMap(_.as[JsArray].value)
+      .count(_ == JsString("1"))
+  }
 }
 
 case class TeamInfo(name: String, town: String)
