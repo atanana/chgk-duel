@@ -16,13 +16,14 @@ class DuelModule extends AbstractModule with AkkaGuiceSupport {
     bindActor[DuelsQueue]("DuelsQueue")
 
     bind(classOf[TeamParser]).toInstance(new TeamParser)
+    bind(classOf[SiteConnector]).to(classOf[SiteConnector])
   }
 
   @Provides
   @Singleton
   @Named("DuelsProcessorRouter")
-  def duelsProcessorRouter(actorSystem: ActorSystem, ws: WSClient, teamParser: TeamParser): ActorRef = {
-    val props = Props(new DuelsProcessor(ws, teamParser))
+  def duelsProcessorRouter(actorSystem: ActorSystem, ws: WSClient, teamParser: TeamParser, siteConnector: SiteConnector): ActorRef = {
+    val props = Props(new DuelsProcessor(ws, teamParser, siteConnector))
     actorSystem.actorOf(RoundRobinPool(1).props(props), "DuelsProcessorRouter")
   }
 }

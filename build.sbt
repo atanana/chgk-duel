@@ -15,7 +15,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" % "akka-testkit_2.11" % "2.4.14" % "test",
   "org.scalatest" % "scalatest_2.11" % "3.0.1" % "test",
   "org.mockito" % "mockito-core" % "2.2.25" % "test",
-  "org.scalatestplus.play" % "scalatestplus-play_2.11" % "2.0.0-M1" % "test"
+  "org.scalatestplus.play" % "scalatestplus-play_2.11" % "2.0.0-M1" % "test",
+  "de.leanovate.play-mockws" %% "play-mockws" % "2.5.0" % "test"
 )
 
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
