@@ -5,7 +5,7 @@ import javax.inject.{Named, Singleton}
 import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.routing.RoundRobinPool
 import com.atanana.actor.{DuelsProcessor, DuelsQueue}
-import com.atanana.parsers.TeamParser
+import com.atanana.parsers.{SiteJsonParser, TeamParser}
 import com.google.inject.{AbstractModule, Provides}
 import play.api.libs.concurrent.AkkaGuiceSupport
 import play.api.libs.ws.WSClient
@@ -17,6 +17,7 @@ class DuelModule extends AbstractModule with AkkaGuiceSupport {
 
     bind(classOf[TeamParser]).toInstance(new TeamParser)
     bind(classOf[SiteConnector]).to(classOf[SiteConnector])
+    bind(classOf[SiteJsonParser]).to(classOf[SiteJsonParser])
   }
 
   @Provides
