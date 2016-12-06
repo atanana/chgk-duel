@@ -3,23 +3,22 @@ package com.atanana.actor
 import javax.inject.Inject
 
 import akka.actor.Actor
-import com.atanana.SiteConnector
-import com.atanana.parsers.TeamParser
-import play.api.libs.ws.WSClient
+import com.atanana.DuelResultGenerator
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 
-class DuelsProcessor @Inject()(ws: WSClient, teamParser: TeamParser, siteConnector: SiteConnector) extends Actor {
+class DuelsProcessor @Inject()(duelResultGenerator: DuelResultGenerator) extends Actor {
   override def receive: Receive = {
     case duelRequest: DuelRequest =>
-      siteConnector.teamPage(duelRequest.teamId1)
-        .zip(siteConnector.teamPage(duelRequest.teamId2))
-        .onComplete {
-          case Success((teamPage1, teamPage2)) =>
-            val tournaments = teamParser.parse(teamPage1).toSet.intersect(teamParser.parse(teamPage2).toSet)
-            duelRequest.listener ! DuelResult(tournaments.toString(), duelRequest.uuid)
-          case Failure(exception) => //todo show error
-        }
+      val resultFuture = duelResultGenerator.generate(duelRequest.teamId1, duelRequest.teamId2)
+      resultFuture.onComplete {
+        case Success(teams) =>
+          duelRequest.listener ! DuelResult(teams.toString(), duelRequest.uuid)
+        case Failure(exception) =>
+      }
+      Await.ready(resultFuture, 5 minutes)
   }
 }

@@ -1,26 +1,63 @@
 package com.atanana
 
-import com.atanana.parsers.TeamInfo
+import javax.inject.Inject
 
-class DuelResultGenerator {
-  def generate(teamInfo1: TeamInfo, teamInfo2: TeamInfo, tournamentsData: Map[Long, (Int, Int)]): (TeamDuelResult, TeamDuelResult) = {
-    var result1 = TeamDuelResult(teamInfo1.name, teamInfo1.town, 0, 0)
-    var result2 = TeamDuelResult(teamInfo2.name, teamInfo2.town, 0, 0)
+import com.atanana.parsers.{SiteJsonParser, TeamParser}
 
-    tournamentsData.foreach { entry =>
-      val team1Result = entry._2._1
-      val team2Result = entry._2._2
-      result1 = result1.copy(totalQuestions = result1.totalQuestions + team1Result)
-      result2 = result2.copy(totalQuestions = result2.totalQuestions + team2Result)
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-      if (team1Result > team2Result) {
-        result1 = result1.copy(wins = result1.wins + 1)
-      } else if (team2Result > team1Result) {
-        result2 = result2.copy(wins = result2.wins + 1)
-      }
-    }
+class DuelResultGenerator @Inject()(siteConnector: SiteConnector, teamParser: TeamParser, jsonParser: SiteJsonParser) {
+  def generate(team1Id: Long, team2Id: Long): Future[(TeamDuelResult, TeamDuelResult)] = {
+    siteConnector.teamPage(team1Id)
+      .zip(siteConnector.teamPage(team2Id))
+      .flatMap(teamPages => teamsDuelTournaments(team1Id, team2Id, teamPages))
+      .map(teamResults)
+      .zip(teamsInfo(team1Id, team2Id))
+      .map(data => {
+        val teamsResult = data._1
+        val teamsInfo = data._2
+        (
+          TeamDuelResult(teamsInfo._1.name, teamsInfo._1.town, teamsResult._1, teamsResult._3),
+          TeamDuelResult(teamsInfo._2.name, teamsInfo._2.town, teamsResult._2, teamsResult._4)
+        )
+      })
+  }
 
-    (result1, result2)
+  private def teamsDuelTournaments(team1Id: Long, team2Id: Long, teamPages: (String, String)) = {
+    val tournamentIds = teamParser.parse(teamPages._1).toSet.intersect(teamParser.parse(teamPages._2).toSet).toList
+    val pageFutures = tournamentIds.map(tournamentId => siteConnector.tournamentInfo(tournamentId, team1Id, team2Id))
+    Future.sequence(pageFutures)
+  }
+
+  private def teamResults(tournamentsData: List[(String, String)]) = {
+    var team1Total = 0
+    var team2Total = 0
+    var team1Wins = 0
+    var team2Wins = 0
+
+    tournamentsData
+      .map(data => (jsonParser.parseTeamResult(data._1), jsonParser.parseTeamResult(data._2)))
+      .foreach(data => {
+        team1Total += data._1
+        team2Total += data._2
+
+        if (data._1 > data._2) {
+          team1Wins += 1
+        } else if (data._2 > data._1) {
+          team2Wins += 1
+        }
+      })
+
+    (team1Wins, team2Wins, team1Total, team2Total)
+  }
+
+  private def teamsInfo(team1Id: Long, team2Id: Long) = {
+    siteConnector.teamInfo(team1Id).zip(siteConnector.teamInfo(team2Id))
+      .map(data => (
+        jsonParser.parseTeamInfo(data._1),
+        jsonParser.parseTeamInfo(data._2)
+      ))
   }
 }
 

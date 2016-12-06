@@ -8,23 +8,23 @@ import com.atanana.actor.{DuelsProcessor, DuelsQueue}
 import com.atanana.parsers.{SiteJsonParser, TeamParser}
 import com.google.inject.{AbstractModule, Provides}
 import play.api.libs.concurrent.AkkaGuiceSupport
-import play.api.libs.ws.WSClient
 
 
 class DuelModule extends AbstractModule with AkkaGuiceSupport {
   override def configure(): Unit = {
     bindActor[DuelsQueue]("DuelsQueue")
 
-    bind(classOf[TeamParser]).toInstance(new TeamParser)
-    bind(classOf[SiteConnector]).to(classOf[SiteConnector])
-    bind(classOf[SiteJsonParser]).to(classOf[SiteJsonParser])
+    bind(classOf[TeamParser])
+    bind(classOf[SiteConnector])
+    bind(classOf[SiteJsonParser])
+    bind(classOf[DuelResultGenerator])
   }
 
   @Provides
   @Singleton
   @Named("DuelsProcessorRouter")
-  def duelsProcessorRouter(actorSystem: ActorSystem, ws: WSClient, teamParser: TeamParser, siteConnector: SiteConnector): ActorRef = {
-    val props = Props(new DuelsProcessor(ws, teamParser, siteConnector))
+  def duelsProcessorRouter(actorSystem: ActorSystem, duelResultGenerator: DuelResultGenerator): ActorRef = {
+    val props = Props(new DuelsProcessor(duelResultGenerator))
     actorSystem.actorOf(RoundRobinPool(1).props(props), "DuelsProcessorRouter")
   }
 }
