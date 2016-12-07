@@ -38,7 +38,7 @@ class DuelsProcessorTest extends ActorSpec with BeforeAndAfter with MockitoSugar
 
       processor ! DuelRequest(listenerProbe.ref, uuid, team1Id, team2Id)
 
-      listenerProbe.expectMsg(DuelResult((result1, result2).toString(), uuid))
+      listenerProbe.expectMsg(DuelResult(result1, result2, uuid))
     }
   }
 }

@@ -3,7 +3,8 @@ package com.atanana.actor
 import java.util.UUID
 
 import akka.actor.ActorRef
-import play.api.libs.json.{JsObject, JsValue, Json}
+import com.atanana.TeamDuelResult
+import play.api.libs.json.{JsObject, Json, Writes}
 
 sealed abstract class DuelMessage(val strType: String) {
   def toJson: JsObject = {
@@ -15,9 +16,19 @@ sealed abstract class DuelMessage(val strType: String) {
 
 case class DuelRequest(listener: ActorRef, uuid: UUID, teamId1: Long, teamId2: Long) extends DuelMessage("DuelRequest")
 
-case class DuelResult(message: String, uuid: UUID) extends DuelMessage("DuelResult") {
+case class DuelResult(team1Result: TeamDuelResult, team2Result: TeamDuelResult, uuid: UUID) extends DuelMessage("DuelResult") {
+  implicit val teamResultWrites: Writes[TeamDuelResult] = new Writes[TeamDuelResult] {
+    override def writes(o: TeamDuelResult): JsObject = Json.obj(
+      "name" -> o.name,
+      "town" -> o.town,
+      "wins" -> o.wins,
+      "total" -> o.totalQuestions
+    )
+  }
+
   override def toJson: JsObject = super.toJson ++ Json.obj(
-    "message" -> message
+    "team1" -> team1Result,
+    "team2" -> team2Result
   )
 }
 

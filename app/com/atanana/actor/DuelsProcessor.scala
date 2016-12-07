@@ -19,8 +19,8 @@ class DuelsProcessor @Inject()(duelResultGenerator: DuelResultGenerator) extends
     case duelRequest: DuelRequest =>
       val resultFuture = duelResultGenerator.generate(duelRequest.teamId1, duelRequest.teamId2)
       resultFuture.onComplete {
-        case Success(teams) =>
-          duelRequest.listener ! DuelResult(teams.toString(), duelRequest.uuid)
+        case Success((team1, team2)) =>
+          duelRequest.listener ! DuelResult(team1, team2, duelRequest.uuid)
         case Failure(exception) =>
       }
       Await.ready(resultFuture, 5 minutes)

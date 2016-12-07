@@ -6,6 +6,7 @@ import akka.actor.{ActorRef, Props}
 import akka.pattern.ask
 import akka.testkit.TestProbe
 import akka.util.Timeout
+import com.atanana.TeamDuelResult
 import org.scalatest._
 
 import scala.concurrent.Await
@@ -15,8 +16,8 @@ import scala.language.postfixOps
 class DuelsQueueTest extends ActorSpec with BeforeAndAfter {
   private val listenerProbe: TestProbe = TestProbe()
   private val routerProbe: TestProbe = TestProbe()
-  private var actor: ActorRef = _
   private val uuid: UUID = UUID.randomUUID()
+  private var actor: ActorRef = _
 
   before {
     actor = system.actorOf(Props(new DuelsQueue(routerProbe.ref)))
@@ -30,7 +31,7 @@ class DuelsQueueTest extends ActorSpec with BeforeAndAfter {
 
     "notifies listener when request processed" in {
       actor ! DuelRequest(listenerProbe.ref, uuid, 1, 2)
-      val result = DuelResult("test message", uuid)
+      val result = DuelResult(mock[TeamDuelResult], mock[TeamDuelResult], uuid)
       actor ! result
       listenerProbe.expectMsg(result)
     }
