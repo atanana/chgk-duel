@@ -14,14 +14,13 @@ class DuelResultGenerator @Inject()(siteConnector: SiteConnector, teamParser: Te
       .flatMap(teamPages => teamsDuelTournaments(team1Id, team2Id, teamPages))
       .map(teamResults)
       .zip(teamsInfo(team1Id, team2Id))
-      .map(data => {
-        val teamsResult = data._1
-        val teamsInfo = data._2
-        (
-          TeamDuelResult(teamsInfo._1.name, teamsInfo._1.town, teamsResult._1, teamsResult._3),
-          TeamDuelResult(teamsInfo._2.name, teamsInfo._2.town, teamsResult._2, teamsResult._4)
-        )
-      })
+      .map {
+        case (((team1Wins, team2Wins, team1Total, team2Total)), (team1Info, team2Info)) =>
+          (
+            TeamDuelResult(team1Info.name, team1Info.town, team1Wins, team1Total),
+            TeamDuelResult(team2Info.name, team2Info.town, team2Wins, team2Total)
+          )
+      }
   }
 
   private def teamsDuelTournaments(team1Id: Long, team2Id: Long, teamPages: (String, String)) = {
@@ -38,26 +37,29 @@ class DuelResultGenerator @Inject()(siteConnector: SiteConnector, teamParser: Te
 
     tournamentsData
       .map(data => (jsonParser.parseTeamResult(data._1), jsonParser.parseTeamResult(data._2)))
-      .foreach(data => {
-        team1Total += data._1
-        team2Total += data._2
+      .foreach {
+        case (team1Result, team2Result) =>
+          team1Total += team1Result
+          team2Total += team2Result
 
-        if (data._1 > data._2) {
-          team1Wins += 1
-        } else if (data._2 > data._1) {
-          team2Wins += 1
-        }
-      })
+          if (team1Result > team2Result) {
+            team1Wins += 1
+          } else if (team2Result > team1Result) {
+            team2Wins += 1
+          }
+      }
 
     (team1Wins, team2Wins, team1Total, team2Total)
   }
 
   private def teamsInfo(team1Id: Long, team2Id: Long) = {
     siteConnector.teamInfo(team1Id).zip(siteConnector.teamInfo(team2Id))
-      .map(data => (
-        jsonParser.parseTeamInfo(data._1),
-        jsonParser.parseTeamInfo(data._2)
-      ))
+      .map {
+        case (team1Page, team2Page) => (
+          jsonParser.parseTeamInfo(team1Page),
+          jsonParser.parseTeamInfo(team2Page)
+        )
+      }
   }
 }
 
