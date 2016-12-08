@@ -1,7 +1,11 @@
 @(message: String)
 
 @main("Welcome to Play") {
-    <button class="btn btn-primary btn-lg" id="duel">Duel</button>
+    <div class="controls-container">
+        <input id="team-id-1" class="form-control input-lg" type="text" placeholder="id первой команды">
+        <input id="team-id-2" class="form-control input-lg" type="text" placeholder="id второй команды">
+        <button class="btn btn-primary btn-lg" id="duel">Дуэль!</button>
+    </div>
 
     <br>
     <br>

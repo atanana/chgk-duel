@@ -1,5 +1,5 @@
 body {
-  padding: 20px;
+  padding: 1em;
 }
 
 #queue-container {
@@ -33,5 +33,25 @@ body {
       margin-left: $default-margin;
       display: inline-block;
     }
+  }
+}
+
+.controls-container {
+  input {
+    width: 40%;
+
+    &:first-of-type {
+      float: left;
+    }
+
+    &:last-of-type {
+      float: right;
+    }
+  }
+
+  button {
+    margin: auto;
+    width: 10%;
+    display: block;
   }
 }
