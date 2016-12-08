@@ -1,5 +1,9 @@
+$default-margin: 1em;
+$double-margin: $default-margin * 2;
+$half-margin: $default-margin / 2;
+
 body {
-  padding: 1em;
+  padding: $default-margin;
 }
 
 #queue-container {
@@ -8,8 +12,6 @@ body {
   flex-wrap: wrap;
 
   div {
-    $default-margin: 1em;
-
     display: inline-block;
     margin-right: $default-margin;
     margin-bottom: $default-margin;
@@ -37,6 +39,8 @@ body {
 }
 
 .controls-container {
+  margin-bottom: $double-margin;
+
   input {
     width: 40%;
 
@@ -50,8 +54,24 @@ body {
   }
 
   button {
-    margin: auto;
     width: 10%;
-    display: block;
+  }
+}
+
+#result-container {
+  margin-top: $double-margin;
+
+  .team-result {
+    width: calc(50% - #{$half-margin});
+    display: inline-block;
+    text-align: center;
+
+    &:first-of-type {
+      margin-right: $half-margin;
+    }
+
+    &:last-of-type {
+      margin-left: $half-margin;
+    }
   }
 }
