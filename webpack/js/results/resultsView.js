@@ -4,7 +4,15 @@ module.exports = function ($container) {
     }
 
     function createTeamView(team) {
-        return $(
+        let winsClass = '';
+
+        if (team.isWinner) {
+            winsClass = 'winner';
+        } else if (team.isLooser) {
+            winsClass = 'looser';
+        }
+
+        let $result = $(
             `
 <div class="team-result panel panel-default">
     <div class="panel-body">
@@ -14,10 +22,19 @@ module.exports = function ($container) {
                 <small>${team.town}</small>
             </h1>
         </div>
+
+        <span class="team-wins ${winsClass}">
+            ${team.wins}
+            <small data-toggle="tooltip" data-placement="top" title="Количество взятых вопросов">${team.total}</small>
+        </span>
     </div>
 </div>
             `
         );
+
+        $result.find('small').tooltip();
+
+        return $result;
     }
 
     return {

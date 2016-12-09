@@ -73,5 +73,25 @@ body {
     &:last-of-type {
       margin-left: $half-margin;
     }
+
+    .team-wins {
+      @extend h1;
+
+      font-size: 10em;
+
+      &.winner {
+        color: $brand-success;
+      }
+
+      &.looser {
+        color: $text-muted;
+      }
+
+      small {
+        font-size: 0.4em;
+        vertical-align: middle;
+        border-bottom: 1px dashed;
+      }
+    }
   }
 }
