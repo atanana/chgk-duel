@@ -86,6 +86,16 @@ describe('requestController.js', function () {
             socket.send.called.should.be.equal(false);
             checkAlert('Введите id второй команды!');
         });
+
+        it('shouldn\'t send request when ids are equal', function () {
+            $teamInput1.val = sinon.stub().returns('123');
+            $teamInput2.val = sinon.stub().returns('123');
+
+            click();
+
+            socket.send.called.should.be.equal(false);
+            checkAlert('Введите разные id!');
+        });
     });
 
     describe('send data to socket', function () {
