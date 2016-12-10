@@ -3,13 +3,13 @@ package com.atanana.actor
 import java.util.UUID
 
 import akka.actor._
-import akka.util.Timeout
 import akka.pattern.ask
-
-import scala.concurrent.duration._
-import scala.language.postfixOps
+import akka.util.Timeout
+import play.api.Logger
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 object SocketHandler {
   def props(out: ActorRef, processor: ActorRef) = Props(new SocketHandler(out, processor))
@@ -20,6 +20,7 @@ class SocketHandler(out: ActorRef, queue: ActorRef) extends Actor {
 
   def receive: Receive = {
     case duelRequest: ClientDuelRequest =>
+      Logger.info("Client requested: " + duelRequest)
       val uuid = UUID.randomUUID()
       out ! DuelRequestAccepted(uuid)
       queue ! DuelRequest(out, uuid, duelRequest.teamId1, duelRequest.teamId2)
