@@ -14,7 +14,7 @@ sealed abstract class DuelMessage(val strType: String) {
   }
 }
 
-case class DuelRequest(listener: ActorRef, uuid: UUID, teamId1: Long, teamId2: Long) extends DuelMessage("DuelRequest")
+case class DuelRequest(listener: ActorRef, uuid: UUID, team1Id: Long, team2Id: Long) extends DuelMessage("DuelRequest")
 
 case class DuelResult(team1Result: TeamDuelResult, team2Result: TeamDuelResult, uuid: UUID) extends DuelMessage("DuelResult") {
   implicit val teamResultWrites: Writes[TeamDuelResult] = new Writes[TeamDuelResult] {
@@ -31,6 +31,8 @@ case class DuelResult(team1Result: TeamDuelResult, team2Result: TeamDuelResult, 
     "team2" -> team2Result
   )
 }
+
+case class DuelFailure(team1Id: Long, team2Id: Long, uuid: UUID) extends DuelMessage("DuelFailure")
 
 case class DuelsQueueState(requests: List[String]) extends DuelMessage("DuelsQueueState") {
   override def toJson: JsObject = super.toJson ++ Json.obj(

@@ -1,5 +1,6 @@
 package com.atanana.actor
 
+import java.util.UUID
 import javax.inject.{Inject, Named}
 
 import akka.actor.{Actor, ActorRef}
@@ -15,14 +16,20 @@ class DuelsQueue @Inject()(@Named("DuelsProcessorRouter") private val router: Ac
       router ! duelRequest.copy(listener = self)
       queueUpdated()
     case duelResult: DuelResult =>
-      queue.find(_.uuid == duelResult.uuid)
-        .foreach(duelRequest => {
-          duelRequest.listener ! duelResult
-          queue = queue diff List(duelRequest)
-          queueUpdated()
-        })
+      processDuelResult(duelResult, duelResult.uuid)
+    case duelFailure: DuelFailure =>
+      processDuelResult(duelFailure, duelFailure.uuid)
     case _: DuelsQueueStateRequest =>
       sender() ! queueState
+  }
+
+  private def processDuelResult(message: AnyRef, uuid: UUID) = {
+    queue.find(_.uuid == uuid)
+      .foreach(duelRequest => {
+        duelRequest.listener ! message
+        queue = queue diff List(duelRequest)
+        queueUpdated()
+      })
   }
 
   private def queueUpdated() = {

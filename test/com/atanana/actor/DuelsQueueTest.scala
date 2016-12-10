@@ -36,6 +36,13 @@ class DuelsQueueTest extends ActorSpec with BeforeAndAfter {
       listenerProbe.expectMsg(result)
     }
 
+    "notifies listener when request failed" in {
+      actor ! DuelRequest(listenerProbe.ref, uuid, 1, 2)
+      val result = DuelFailure(1, 2, uuid)
+      actor ! result
+      listenerProbe.expectMsg(result)
+    }
+
     "provides queue state" in {
       actor ! DuelRequest(listenerProbe.ref, uuid, 1, 2)
       implicit val timeout = Timeout(5 seconds)

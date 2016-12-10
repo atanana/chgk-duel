@@ -40,5 +40,16 @@ class DuelsProcessorTest extends ActorSpec with BeforeAndAfter with MockitoSugar
 
       listenerProbe.expectMsg(DuelResult(result1, result2, uuid))
     }
+
+    "notify listener about error" in {
+      when(duelResultGenerator.generate(team1Id, team2Id)).thenReturn(Future {
+        throw new RuntimeException
+      })
+      val uuid = UUID.randomUUID()
+
+      processor ! DuelRequest(listenerProbe.ref, uuid, team1Id, team2Id)
+
+      listenerProbe.expectMsg(DuelFailure(team1Id, team2Id, uuid))
+    }
   }
 }

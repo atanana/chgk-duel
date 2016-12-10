@@ -19,14 +19,16 @@ class DuelsProcessor @Inject()(duelResultGenerator: DuelResultGenerator) extends
   override def receive: Receive = {
     case duelRequest: DuelRequest =>
       Logger.info("Start processing: " + duelRequest)
-      val resultFuture = duelResultGenerator.generate(duelRequest.teamId1, duelRequest.teamId2)
+      val resultFuture = duelResultGenerator.generate(duelRequest.team1Id, duelRequest.team2Id)
       resultFuture.onComplete {
         case Success((team1, team2)) =>
           Logger.info("Send to client: " + (team1, team2))
           duelRequest.listener ! DuelResult(team1, team2, duelRequest.uuid)
         case Failure(exception) =>
           Logger.error("Error on processing duel request!", exception)
+          duelRequest.listener ! DuelFailure(duelRequest.team1Id, duelRequest.team2Id, duelRequest.uuid)
       }
       Await.ready(resultFuture, 5 minutes)
+    //todo check timeout
   }
 }
