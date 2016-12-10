@@ -1,3 +1,5 @@
+const $ = require('jquery');
+
 module.exports = function ($container) {
     function createSubContainer() {
         return $('<div/>')
