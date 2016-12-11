@@ -1,8 +1,11 @@
+const jsdom = require('mocha-jsdom');
 const sinon = require('sinon');
 const chai = require('chai');
 const should = chai.should();
 
 describe('resultsPresenter.js', function () {
+    jsdom();
+
     describe('socket interaction', function () {
         let socket;
         let resultsView;
@@ -16,6 +19,7 @@ describe('resultsPresenter.js', function () {
                 addResult: sinon.spy()
             };
             resultsPresenter = require('../../js/results/resultsPresenter.js')(socket, resultsView);
+            window.alert = sinon.spy();
         });
 
         function createTeamData(name, town, wins, total) {
@@ -94,6 +98,16 @@ describe('resultsPresenter.js', function () {
             should.not.exist(team1.isLooser);
             should.not.exist(team2.isWinner);
             should.not.exist(team2.isLooser);
+        });
+
+        it('should transmit duel error', function () {
+            socket.addMessageListener.args[0][0]({
+                type: 'DuelFailure',
+                team1: 1,
+                team2: 2
+            });
+
+            window.alert.args[0][0].should.be.equal('Дуэль между командами 1 и 2 завершилась неудачей!');
         });
     });
 });

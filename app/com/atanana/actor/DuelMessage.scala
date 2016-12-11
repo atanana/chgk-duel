@@ -32,7 +32,12 @@ case class DuelResult(team1Result: TeamDuelResult, team2Result: TeamDuelResult, 
   )
 }
 
-case class DuelFailure(team1Id: Long, team2Id: Long, uuid: UUID) extends DuelMessage("DuelFailure")
+case class DuelFailure(team1Id: Long, team2Id: Long, uuid: UUID) extends DuelMessage("DuelFailure") {
+  override def toJson: JsObject = super.toJson ++ Json.obj(
+    "team1" -> team1Id,
+    "team2" -> team2Id
+  )
+}
 
 case class DuelsQueueState(requests: List[String]) extends DuelMessage("DuelsQueueState") {
   override def toJson: JsObject = super.toJson ++ Json.obj(

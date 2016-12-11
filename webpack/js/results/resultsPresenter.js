@@ -15,6 +15,8 @@ module.exports = function (socket, resultsView) {
             }
 
             resultsView.addResult(team1, team2);
+        } else if (data.type === 'DuelFailure') {
+            window.alert(`Дуэль между командами ${data.team1} и ${data.team2} завершилась неудачей!`);
         }
     });
 };
