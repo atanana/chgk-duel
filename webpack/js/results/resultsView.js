@@ -1,8 +1,19 @@
-const $ = require('jquery');
-
-module.exports = function ($container) {
+module.exports = function ($container, $) {
     function createSubContainer() {
-        return $('<div/>')
+        let $resultContainer = $(`
+<div>
+    <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+    <div class="clearfix"></div>
+</div>
+`);
+        $resultContainer.find('.close').on('click', () => {
+            $resultContainer.remove();
+
+            if (!$container.children().length) {
+                $container.addClass('hidden');
+            }
+        });
+        return $resultContainer;
     }
 
     function createTeamView(team) {
