@@ -1,4 +1,4 @@
-const socket = new WebSocket("ws://localhost:9000/duel");
+const socket = new WebSocket(`ws://${location.host}/duel`);
 const messageListeners = [];
 
 socket.onopen = () => {
