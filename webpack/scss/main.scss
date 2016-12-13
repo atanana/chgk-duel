@@ -61,6 +61,10 @@ body {
 #result-container {
   margin-top: $double-margin;
 
+  .close {
+    color: $brand-danger;
+  }
+
   .team-result {
     width: calc(50% - #{$half-margin});
     display: inline-block;
