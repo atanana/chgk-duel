@@ -5,12 +5,15 @@ import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.model.{Document, Element}
 
+import scala.util.Try
+
 class TeamParser {
   def parse(source: String): List[Long] = {
     val document: Document = JsoupBrowser().parseString(source)
     (document >> elementList(".tournaments_table tbody tr"))
       .filter(_.children.size > 1)
-      .flatMap(row => {
+      .flatMap(row => Try {
+
         val cells: List[Element] = row.children.toList
         val place: Float = cells(9).text.toString.replace(',', '.').toFloat
 
@@ -19,6 +22,6 @@ class TeamParser {
         } else {
           List.empty
         }
-      })
+      } getOrElse List.empty)
   }
 }

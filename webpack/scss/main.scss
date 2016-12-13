@@ -16,11 +16,10 @@ body {
     margin-right: $default-margin;
     margin-bottom: $default-margin;
     padding: $default-margin;
-    border-radius: 0.2em;
     background-color: $label-default-bg;
 
     &.own-job {
-      background-color: $label-success-bg;
+      background-color: $brand-info;
     }
 
     .glyphicon {
@@ -60,6 +59,10 @@ body {
 
 #result-container {
   margin-top: $double-margin;
+
+  .close {
+    color: $brand-danger;
+  }
 
   .team-result {
     width: calc(50% - #{$half-margin});

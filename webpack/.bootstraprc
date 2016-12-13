@@ -35,7 +35,7 @@ extractStyles: true
 # For example, _variables.scss contains:
 # $input-color: $gray !default;
 # This means you can define $input-color before we load _variables.scss
-#preBootstrapCustomizations: ./app/styles/bootstrap/pre-customizations.scss
+preBootstrapCustomizations: ./scss/yeti.scss
 
 # This gets loaded after bootstrap/variables is loaded and before bootstrap is loaded.
 # A good example of this is when you want to override a bootstrap variable to be based
@@ -64,62 +64,62 @@ styles:
 
   # Reset and dependencies
   normalize: true
-  print: true
+  print: false
   glyphicons: true
 
   # Core CSS
   scaffolding: true
   type: true
-  code: true
-  grid: true
-  tables: true
+  code: false
+  grid: false
+  tables: false
   forms: true
   buttons: true
 
   # Components
   component-animations: true
-  dropdowns: true
-  button-groups: true
+  dropdowns: false
+  button-groups: false
   input-groups: true
-  navs: true
-  navbar: true
-  breadcrumbs: true
-  pagination: true
-  pager: true
+  navs: false
+  navbar: false
+  breadcrumbs: false
+  pagination: false
+  pager: false
   labels: true
-  badges: true
-  jumbotron: true
-  thumbnails: true
-  alerts: true
-  progress-bars: true
-  media: true
-  list-group: true
+  badges: false
+  jumbotron: false
+  thumbnails: false
+  alerts: false
+  progress-bars: false
+  media: false
+  list-group: false
   panels: true
   wells: true
-  responsive-embed: true
+  responsive-embed: false
   close: true
 
   # Components w/ JavaScript
-  modals: true
+  modals: false
   tooltip: true
-  popovers: true
-  carousel: true
+  popovers: false
+  carousel: false
 
   # Utility classes
   utilities: true
-  responsive-utilities: true
+  responsive-utilities: false
 
 ### Bootstrap scripts
 scripts:
-  transition: true
-  alert: true
-  button: true
-  carousel: true
-  collapse: true
-  dropdown: true
-  modal: true
+  transition: false
+  alert: false
+  button: false
+  carousel: false
+  collapse: false
+  dropdown: false
+  modal: false
   tooltip: true
-  popover: true
-  scrollspy: true
-  tab: true
-  affix: true
+  popover: false
+  scrollspy: false
+  tab: false
+  affix: false
