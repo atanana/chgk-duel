@@ -35,7 +35,7 @@ extractStyles: true
 # For example, _variables.scss contains:
 # $input-color: $gray !default;
 # This means you can define $input-color before we load _variables.scss
-#preBootstrapCustomizations: ./app/styles/bootstrap/pre-customizations.scss
+preBootstrapCustomizations: ./scss/yeti.scss
 
 # This gets loaded after bootstrap/variables is loaded and before bootstrap is loaded.
 # A good example of this is when you want to override a bootstrap variable to be based
@@ -65,7 +65,7 @@ styles:
   # Reset and dependencies
   normalize: true
   print: false
-  glyphicons: false
+  glyphicons: true
 
   # Core CSS
   scaffolding: true
@@ -77,7 +77,7 @@ styles:
   buttons: true
 
   # Components
-  component-animations: false
+  component-animations: true
   dropdowns: false
   button-groups: false
   input-groups: true
