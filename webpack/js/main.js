@@ -2,7 +2,7 @@ const $ = require('jquery');
 
 require('bootstrap-loader');
 
-const socket = require('./socket.js');
+const socket = require('./socket.js')(new WebSocket(`ws://${location.host}/duel`));
 
 const queueView = require('./queue/queueView.js')($('#queue-container'));
 const queuePresenter = require('./queue/queuePresenter.js')(socket, queueView);
