@@ -14,10 +14,13 @@ describe('requestController.js', function () {
 
     beforeEach(function () {
         socket = {
-            send: sinon.spy()
+            send: sinon.spy(),
+            addConnectionListener: sinon.spy()
         };
         $button = {
-            on: sinon.spy()
+            on: sinon.spy(),
+            removeAttr: sinon.spy(),
+            text: sinon.spy()
         };
         $teamInput1 = {
             val: sinon.stub()
@@ -43,6 +46,17 @@ describe('requestController.js', function () {
             $button.on.calledOnce.should.be.equal(true);
             $button.on.args[0][0].should.be.eq('click');
             should.exist($button.on.args[0][1]);
+        });
+
+        it('add appropriate socket connection listener', function () {
+            const connectionListener = socket.addConnectionListener.args[0][0];
+            connectionListener();
+
+            $button.removeAttr.calledOnce.should.be.equal(true);
+            $button.removeAttr.args[0][0].should.be.equal('disabled');
+
+            $button.text.calledOnce.should.be.equal(true);
+            $button.text.args[0][0].should.be.equal('Дуэль!');
         });
     });
 

@@ -1,8 +1,14 @@
 const socket = new WebSocket(`ws://${location.host}/duel`);
 const messageListeners = [];
+const connectionListeners = [];
+let connected = false;
 
 socket.onopen = () => {
     console.log('Connection established');
+    connected = true;
+    for (let listener of connectionListeners) {
+        listener()
+    }
 };
 
 socket.onclose = (event) => {
@@ -26,10 +32,17 @@ socket.onerror = (error) => {
 };
 
 module.exports = {
-    send: function (data) {
+    send(data) {
         socket.send(JSON.stringify(data));
     },
-    addMessageListener: function (listener) {
+    addMessageListener(listener) {
         messageListeners.push(listener)
+    },
+    addConnectionListener(listener) {
+        if (connected) {
+            listener();
+        } else {
+            connectionListeners.push(listener);
+        }
     }
 };

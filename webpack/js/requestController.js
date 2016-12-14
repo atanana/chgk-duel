@@ -1,4 +1,9 @@
 module.exports = function (socket, $duelButton, $teamInput1, $teamInput2) {
+    socket.addConnectionListener(() => {
+        $duelButton.removeAttr('disabled');
+        $duelButton.text('Дуэль!');
+    });
+
     $duelButton.on('click', () => {
         const teamId1 = parseInt($teamInput1.val());
         if (teamId1) {
