@@ -12,16 +12,19 @@ class TeamParser {
     val document: Document = JsoupBrowser().parseString(source)
     (document >> elementList(".tournaments_table tbody tr"))
       .filter(_.children.size > 1)
-      .flatMap(row => Try {
+      .flatMap(tryParseTournamentId)
+  }
 
-        val cells: List[Element] = row.children.toList
-        val place: Float = cells(9).text.toString.replace(',', '.').toFloat
+  private def tryParseTournamentId(row: Element) = {
+    Try {
+      val cells: List[Element] = row.children.toList
+      val place: Float = cells(9).text.toString.replace(',', '.').toFloat
 
-        if (place != 9999) {
-          List(cells(1).text.toString.toLong)
-        } else {
-          List.empty
-        }
-      } getOrElse List.empty)
+      if (place != 9999) {
+        List(cells(1).text.toString.toLong)
+      } else {
+        List.empty
+      }
+    } getOrElse List.empty
   }
 }
